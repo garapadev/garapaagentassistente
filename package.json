@@ -1,8 +1,8 @@
 {
   "name": "garapaagentassitent",
   "displayName": "GarapaAgent Assistant",
-  "description": "AI-powered agent assistant for VS Code with customizable roles and behaviors",
-  "version": "0.0.4",
+  "description": "Intelligent AI agent with customizable roles and file editing capabilities for VS Code development assistance",
+  "version": "0.1.0",
   "publisher": "garapadev",
   "repository": {
     "type": "git",

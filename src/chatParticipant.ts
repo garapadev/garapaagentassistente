@@ -12,6 +12,7 @@ interface Role {
 export class GarapaAgentChatParticipant {
     private roles: Role[] = [];
     private currentRole: Role | null = null;
+    private agentMode: boolean = false; // New agent mode flag
 
     constructor() {
         this.loadRoles();
@@ -46,6 +47,24 @@ export class GarapaAgentChatParticipant {
                 return;
             }
             
+            if (userMessage.startsWith('/agent on')) {
+                this.agentMode = true;
+                stream.markdown('🤖 **Modo Agente ATIVADO!**\n\nAgora posso executar ações como:\n- ✅ Criar e editar arquivos\n- ✅ Executar comandos\n- ✅ Implementar código\n- ✅ Refatorar projetos\n\nTente: *"criar um arquivo teste.js com uma função hello world"*');
+                return;
+            }
+            
+            if (userMessage.startsWith('/agent off')) {
+                this.agentMode = false;
+                stream.markdown('💬 **Modo Agente DESATIVADO**\n\nVoltei ao modo chat normal. Use `/agent on` para reativar.');
+                return;
+            }
+            
+            if (userMessage.startsWith('/mode') || userMessage.startsWith('/agent')) {
+                const status = this.agentMode ? '🤖 ATIVO' : '💬 DESATIVO';
+                stream.markdown(`**Modo Agente:** ${status}\n\n**Comandos:**\n- \`/agent on\` - Ativar modo agente\n- \`/agent off\` - Desativar modo agente\n\n**No modo agente posso:**\n- Criar/editar arquivos\n- Executar comandos\n- Implementar funcionalidades\n- Fazer refatorações`);
+                return;
+            }
+            
             if (userMessage.startsWith('/role ')) {
                 const roleName = userMessage.substring(6).trim();
                 this.setRole(roleName, stream);
@@ -70,9 +89,18 @@ export class GarapaAgentChatParticipant {
             // Analyze the workspace context
             const workspaceInfo = await this.getWorkspaceContext();
             
-        // Craft a prompt for the language model with role context
-        const systemPrompt = await this.createSystemPrompt(workspaceInfo);
-        const fullPrompt = `${systemPrompt}\n\nUsuário: ${userMessage}`;            // Try to get a language model
+            // Check if user is asking for file operations or code generation
+            const isFileOperation = this.detectFileOperation(userMessage);
+            const isCodeRequest = this.detectCodeRequest(userMessage);
+            
+            if (this.agentMode && (isFileOperation || isCodeRequest)) {
+                await this.handleAgentRequest(userMessage, stream, workspaceInfo);
+                return;
+            }
+            
+            // Craft a prompt for the language model with role context
+            const systemPrompt = await this.createSystemPrompt(workspaceInfo);
+            const fullPrompt = `${systemPrompt}\n\nUsuário: ${userMessage}`;            // Try to get a language model
             const models = await vscode.lm.selectChatModels({ 
                 vendor: 'copilot',
                 family: 'gpt-4o'
@@ -417,6 +445,11 @@ ESPECIALIDADES BASE:
 - \`/init\` - Cria a pasta "roles/" com arquivos .mdc padrão
 - \`/setup\` - Configura ambiente de desenvolvimento (PM2, dependências, etc.)
 
+### **Modo Agente 🚀**
+- \`/agent on\` - **ATIVAR capacidades de agente** (criar/editar arquivos, executar comandos)
+- \`/agent off\` - Desativar modo agente (volta ao chat normal)
+- \`/mode\` ou \`/agent\` - Ver status do modo agente
+
 ### **Role Management**
 - \`/rules\` ou \`/roles\` - Lista todos os roles disponíveis
 - \`/role [nome]\` - Ativa um role específico
@@ -425,6 +458,16 @@ ESPECIALIDADES BASE:
 ### **Sistema**
 - \`/help\` - Mostra esta ajuda
 - \`/status\` - Mostra status atual do assistente
+
+## 🤖 Capacidades do Modo Agente
+
+Quando ativado com \`/agent on\`, posso:
+- ✅ **Criar arquivos** - "criar um arquivo index.js com código inicial"
+- ✅ **Editar código** - "adicionar uma função de login no arquivo auth.js"
+- ✅ **Executar comandos** - "instalar dependências npm"
+- ✅ **Implementar features** - "implementar autenticação JWT completa"
+- ✅ **Refatorar código** - "refatorar este componente para usar hooks"
+- ✅ **Corrigir bugs** - "corrigir erro de tipagem no arquivo user.ts"
 
 ## 🎭 Roles Disponíveis (após /init)
 - **frontend-developer** - Especialista em desenvolvimento Frontend (shadcn/ui + Recharts)
@@ -438,18 +481,22 @@ ESPECIALIDADES BASE:
 ### Primeiro uso:
 \`\`\`
 @gaa /init
+@gaa /agent on
 @gaa /setup
 \`\`\`
 
-### Exemplo Básico:
+### Exemplo com Agente:
 \`\`\`
-@gaa Como implementar autenticação JWT?
+@gaa /agent on
+@gaa criar um componente Button.tsx com TypeScript
 \`\`\`
 
 ### Com Role Específico:
 \`\`\`
 @gaa /role frontend-developer
-@gaa Como criar um componente React responsivo?
+@gaa /agent on
+@gaa implementar um dashboard com gráficos usando Recharts
+\`\`\`
 \`\`\`
 
 ### Configuração de Ambiente:
@@ -482,6 +529,16 @@ ESPECIALIDADES BASE:
         const activeEditor = vscode.window.activeTextEditor;
         
         let statusInfo = `# 📊 Status do GarapaAgent Assistant\n\n`;
+        
+        // Agent Mode Status
+        statusInfo += `## 🤖 Modo Agente\n`;
+        if (this.agentMode) {
+            statusInfo += `✅ **ATIVO** - Posso criar/editar arquivos e executar comandos\n`;
+            statusInfo += `💡 Tente: *"criar um arquivo teste.js"* ou *"implementar uma função de login"*\n\n`;
+        } else {
+            statusInfo += `❌ **INATIVO** - Modo chat apenas\n`;
+            statusInfo += `💡 Use \`/agent on\` para ativar capacidades de agente\n\n`;
+        }
         
         // Role Status
         statusInfo += `## 🎭 Role Atual\n`;
@@ -1715,6 +1772,329 @@ ${isWindows ? 'netstat -ano | findstr :3000' : 'lsof -i :3000'}
         } catch (error) {
             // Não falha se não conseguir atualizar o .gitignore
             console.warn('Could not update .gitignore:', error);
+        }
+    }
+
+    // === AGENT CAPABILITIES ===
+    
+    private detectFileOperation(message: string): boolean {
+        const fileKeywords = [
+            'criar arquivo', 'create file', 'novo arquivo', 'new file',
+            'editar arquivo', 'edit file', 'modificar arquivo', 'modify file',
+            'deletar arquivo', 'delete file', 'remover arquivo', 'remove file',
+            'ler arquivo', 'read file', 'abrir arquivo', 'open file',
+            'escrever no arquivo', 'write to file', 'salvar arquivo', 'save file'
+        ];
+        
+        return fileKeywords.some(keyword => 
+            message.toLowerCase().includes(keyword.toLowerCase())
+        );
+    }
+    
+    private detectCodeRequest(message: string): boolean {
+        const codeKeywords = [
+            'implementar', 'implement', 'código', 'code', 'função', 'function',
+            'classe', 'class', 'componente', 'component', 'criar', 'create',
+            'gerar', 'generate', 'adicionar', 'add', 'fazer', 'make',
+            'desenvolver', 'develop', 'construir', 'build', 'script',
+            'refatorar', 'refactor', 'corrigir', 'fix', 'bug'
+        ];
+        
+        return codeKeywords.some(keyword => 
+            message.toLowerCase().includes(keyword.toLowerCase())
+        );
+    }
+    
+    private async handleAgentRequest(
+        userMessage: string, 
+        stream: vscode.ChatResponseStream, 
+        workspaceInfo: any
+    ): Promise<void> {
+        try {
+            stream.progress('🤖 Analisando solicitação como agente...');
+            
+            // Get enhanced language model for agent capabilities
+            const models = await vscode.lm.selectChatModels({ 
+                vendor: 'copilot',
+                family: 'gpt-4o'
+            });
+
+            if (models.length === 0) {
+                stream.markdown('❌ Modelo de linguagem não disponível para capacidades de agente.');
+                return;
+            }
+
+            const model = models[0];
+            
+            // Create agent system prompt
+            const agentPrompt = await this.createAgentSystemPrompt(workspaceInfo);
+            const fullPrompt = `${agentPrompt}\n\nUsuário: ${userMessage}`;
+
+            // Send request with agent context
+            const messages: vscode.LanguageModelChatMessage[] = [
+                vscode.LanguageModelChatMessage.User(fullPrompt)
+            ];
+
+            const response = await model.sendRequest(messages, {
+                modelOptions: {
+                    temperature: 0.3, // Lower temperature for more precise agent actions
+                    maxTokens: 2000
+                }
+            });
+
+            // Parse and execute agent response
+            let responseText = '';
+            for await (const fragment of response.text) {
+                responseText += fragment;
+            }
+            
+            // Try to extract and execute actions from the response
+            await this.executeAgentActions(responseText, stream);
+            
+            // Also show the reasoning
+            stream.markdown('\n**🤖 Resposta do Agente:**\n');
+            stream.markdown(responseText);
+            
+        } catch (error) {
+            console.error('Erro nas capacidades de agente:', error);
+            stream.markdown('❌ Erro ao executar capacidades de agente. Tentando resposta padrão...');
+            
+            // Fallback to regular chat
+            await this.handleRegularChat(userMessage, stream);
+        }
+    }
+    
+    private async createAgentSystemPrompt(workspaceInfo: any): Promise<string> {
+        const roleContext = this.currentRole ? 
+            `\n### ROLE ATIVO:\n${this.currentRole.content}\n` : '';
+        
+        return `Você é o GarapaAgent Assistant, um agente de IA inteligente com capacidades avançadas de edição de código e arquivos.
+
+### CAPACIDADES DO AGENTE:
+- ✅ Criar, editar, ler e deletar arquivos
+- ✅ Executar comandos no terminal
+- ✅ Analisar e modificar código
+- ✅ Implementar funcionalidades completas
+- ✅ Refatorar e corrigir bugs
+- ✅ Gerenciar estrutura de projetos
+
+### INSTRUÇÕES IMPORTANTES:
+1. Quando identificar uma solicitação de arquivo ou código, EXECUTE as ações necessárias
+2. Para operações de arquivo, use sempre caminhos absolutos baseados no workspace
+3. Antes de modificar código, analise o contexto existente
+4. Mantenha consistência com padrões do projeto
+5. Sempre explique suas ações ao usuário
+
+### WORKSPACE ATUAL:
+${JSON.stringify(workspaceInfo, null, 2)}
+
+${roleContext}
+
+### FORMATO DE RESPOSTA:
+Para executar ações, use a sintaxe:
+\`\`\`action:type
+parâmetros da ação
+\`\`\`
+
+Tipos de ação disponíveis:
+- action:create-file (criar arquivo)
+- action:edit-file (editar arquivo) 
+- action:read-file (ler arquivo)
+- action:run-command (executar comando)
+- action:search-code (buscar código)
+
+Seja preciso e sempre explique o que está fazendo.`;
+    }
+    
+    private async executeAgentActions(responseText: string, stream: vscode.ChatResponseStream): Promise<void> {
+        // Extract action blocks from response
+        const actionRegex = /```action:(\w+)\n([\s\S]*?)```/g;
+        let match;
+        
+        while ((match = actionRegex.exec(responseText)) !== null) {
+            const actionType = match[1];
+            const actionParams = match[2].trim();
+            
+            try {
+                stream.progress(`🔧 Executando: ${actionType}...`);
+                
+                switch (actionType) {
+                    case 'create-file':
+                        await this.executeCreateFile(actionParams, stream);
+                        break;
+                    case 'edit-file':
+                        await this.executeEditFile(actionParams, stream);
+                        break;
+                    case 'read-file':
+                        await this.executeReadFile(actionParams, stream);
+                        break;
+                    case 'run-command':
+                        await this.executeRunCommand(actionParams, stream);
+                        break;
+                    case 'search-code':
+                        await this.executeSearchCode(actionParams, stream);
+                        break;
+                    default:
+                        stream.markdown(`⚠️ Ação desconhecida: ${actionType}`);
+                }
+            } catch (error) {
+                stream.markdown(`❌ Erro executando ${actionType}: ${error}`);
+            }
+        }
+    }
+    
+    private async executeCreateFile(params: string, stream: vscode.ChatResponseStream): Promise<void> {
+        const lines = params.split('\n');
+        const filePath = lines[0].replace('path: ', '').trim();
+        const content = lines.slice(1).join('\n').replace(/^content:\s*/, '');
+        
+        if (!vscode.workspace.workspaceFolders) {
+            stream.markdown('❌ Nenhum workspace aberto');
+            return;
+        }
+        
+        const fullPath = path.isAbsolute(filePath) ? 
+            filePath : 
+            path.join(vscode.workspace.workspaceFolders[0].uri.fsPath, filePath);
+        
+        try {
+            // Create directory if needed
+            const dir = path.dirname(fullPath);
+            await fs.mkdir(dir, { recursive: true });
+            
+            // Write file
+            await fs.writeFile(fullPath, content, 'utf8');
+            
+            stream.markdown(`✅ Arquivo criado: \`${filePath}\``);
+            
+            // Open file in editor
+            const document = await vscode.workspace.openTextDocument(fullPath);
+            await vscode.window.showTextDocument(document);
+            
+        } catch (error) {
+            stream.markdown(`❌ Erro criando arquivo: ${error}`);
+        }
+    }
+    
+    private async executeEditFile(params: string, stream: vscode.ChatResponseStream): Promise<void> {
+        const lines = params.split('\n');
+        const filePath = lines[0].replace('path: ', '').trim();
+        const searchText = lines.find(l => l.startsWith('search: '))?.replace('search: ', '') || '';
+        const replaceText = lines.slice(lines.findIndex(l => l.startsWith('replace:')) + 1).join('\n');
+        
+        if (!vscode.workspace.workspaceFolders) {
+            stream.markdown('❌ Nenhum workspace aberto');
+            return;
+        }
+        
+        const fullPath = path.isAbsolute(filePath) ? 
+            filePath : 
+            path.join(vscode.workspace.workspaceFolders[0].uri.fsPath, filePath);
+        
+        try {
+            // Read current content
+            const content = await fs.readFile(fullPath, 'utf8');
+            
+            // Replace content
+            const newContent = searchText ? 
+                content.replace(searchText, replaceText) : 
+                replaceText;
+            
+            // Write back
+            await fs.writeFile(fullPath, newContent, 'utf8');
+            
+            stream.markdown(`✅ Arquivo editado: \`${filePath}\``);
+            
+            // Open file in editor
+            const document = await vscode.workspace.openTextDocument(fullPath);
+            await vscode.window.showTextDocument(document);
+            
+        } catch (error) {
+            stream.markdown(`❌ Erro editando arquivo: ${error}`);
+        }
+    }
+    
+    private async executeReadFile(params: string, stream: vscode.ChatResponseStream): Promise<void> {
+        const filePath = params.replace('path: ', '').trim();
+        
+        if (!vscode.workspace.workspaceFolders) {
+            stream.markdown('❌ Nenhum workspace aberto');
+            return;
+        }
+        
+        const fullPath = path.isAbsolute(filePath) ? 
+            filePath : 
+            path.join(vscode.workspace.workspaceFolders[0].uri.fsPath, filePath);
+        
+        try {
+            const content = await fs.readFile(fullPath, 'utf8');
+            
+            stream.markdown(`📄 **Conteúdo de \`${filePath}\`:**\n\`\`\`\n${content}\n\`\`\``);
+            
+        } catch (error) {
+            stream.markdown(`❌ Erro lendo arquivo: ${error}`);
+        }
+    }
+    
+    private async executeRunCommand(params: string, stream: vscode.ChatResponseStream): Promise<void> {
+        const command = params.replace('command: ', '').trim();
+        
+        try {
+            const terminal = vscode.window.createTerminal('GarapaAgent');
+            terminal.show();
+            terminal.sendText(command);
+            
+            stream.markdown(`⚡ Comando executado no terminal: \`${command}\``);
+            
+        } catch (error) {
+            stream.markdown(`❌ Erro executando comando: ${error}`);
+        }
+    }
+    
+    private async executeSearchCode(params: string, stream: vscode.ChatResponseStream): Promise<void> {
+        const query = params.replace('query: ', '').trim();
+        
+        try {
+            // Use VS Code's search API
+            await vscode.commands.executeCommand('workbench.action.findInFiles', {
+                query: query,
+                triggerSearch: true
+            });
+            
+            stream.markdown(`🔍 Busca iniciada por: \`${query}\``);
+            
+        } catch (error) {
+            stream.markdown(`❌ Erro na busca: ${error}`);
+        }
+    }
+    
+    private async handleRegularChat(userMessage: string, stream: vscode.ChatResponseStream): Promise<void> {
+        // Fallback to regular chat functionality
+        const models = await vscode.lm.selectChatModels({ 
+            vendor: 'copilot',
+            family: 'gpt-4o'
+        });
+
+        if (models.length === 0) {
+            stream.markdown('❌ Nenhum modelo de linguagem disponível.');
+            return;
+        }
+
+        const model = models[0];
+        
+        const messages: vscode.LanguageModelChatMessage[] = [
+            vscode.LanguageModelChatMessage.User(userMessage)
+        ];
+
+        const response = await model.sendRequest(messages, {
+            modelOptions: {
+                temperature: 0.7,
+                maxTokens: 1000
+            }
+        });
+
+        for await (const fragment of response.text) {
+            stream.markdown(fragment);
         }
     }
 }
