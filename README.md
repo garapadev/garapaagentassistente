@@ -1,19 +1,20 @@
 # 🤖 GarapaAgent Assistant
 
-> **Agente de IA Inteligente para VS Code com Sistema de Roles Personalizáveis**
+> **Agente de IA Inteligente para VS Code com Capacidades Avançadas de Edição e Sistema de Roles**
 
-[![Version](https://img.shields.io/badge/version-0.0.4-blue.svg)](https://github.com/garapadev/garapaagentassistente/releases)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/garapadev/garapaagentassistente/releases)
 [![VS Code](https://img.shields.io/badge/VS%20Code-1.102.0+-brightgreen.svg)](https://code.visualstudio.com/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ## 🚀 **O que é o GarapaAgent Assistant?**
 
-Uma extensão poderosa para VS Code que implementa um **agente de IA personalizable** com sistema de roles especializado, integração nativa com GitHub Copilot e comandos inteligentes para automação de desenvolvimento.
+Uma extensão revolucionária para VS Code que implementa um **agente de IA com capacidades reais de edição**, sistema de roles especializado e automação completa de desenvolvimento. Não é apenas um chat - é um **verdadeiro assistente de desenvolvimento**.
 
 ### ✨ **Principais Recursos**
 
+🤖 **Modo Agente**: **CRIA, EDITA e EXECUTA** arquivos e comandos reais  
 🎭 **Sistema de Roles**: Comportamentos especializados através de arquivos `.mdc`  
-🤖 **Chat Participant**: Integração nativa `@gaa` no chat do VS Code  
+⚡ **Chat Participant**: Integração nativa `@gaa` no chat do VS Code  
 ⚙️ **Comando /setup**: Detecção automática de ambiente + preview browser  
 🌐 **Interface Webview**: Chat customizado com UI moderna  
 📊 **Especialização shadcn/ui + Recharts**: Frontend developer expert  
@@ -37,11 +38,38 @@ code --install-extension garapaagentassitent-0.0.4.vsix
 
 ### **Comandos Principais**
 ```
-@gaa /help        # Ver todos os comandos disponíveis
-@gaa /init        # Criar pasta roles com templates
-@gaa /setup       # Configurar ambiente de desenvolvimento
-@gaa /status      # Verificar status atual
-@gaa /role <nome> # Ativar role específico
+@gaa /help          # Ver todos os comandos disponíveis
+@gaa /agent on      # 🚀 ATIVAR modo agente (capacidades de edição)
+@gaa /agent off     # Desativar modo agente
+@gaa /init          # Criar pasta roles com templates
+@gaa /setup         # Configurar ambiente de desenvolvimento
+@gaa /role <nome>   # Ativar role específico
+```
+
+### **🤖 Capacidades do Modo Agente (NOVO!)**
+
+Quando ativado com `/agent on`, o GarapaAgent pode:
+
+#### **📁 Operações de Arquivo:**
+```
+@gaa criar um arquivo Button.tsx com componente React
+@gaa editar o arquivo App.js para adicionar roteamento
+@gaa ler o conteúdo do arquivo package.json
+```
+
+#### **💻 Implementação de Código:**
+```
+@gaa implementar autenticação JWT completa
+@gaa criar um dashboard com gráficos usando Recharts
+@gaa refatorar este componente para usar hooks
+@gaa corrigir o bug de tipagem no arquivo user.ts
+```
+
+#### **⚡ Execução de Comandos:**
+```
+@gaa instalar dependências do projeto
+@gaa executar npm run build
+@gaa inicializar repositório git
 ```
 
 ### **Sistema de Roles**
@@ -97,6 +125,7 @@ O comando `/setup` é uma das principais inovações da extensão:
 
 ## 📚 **Documentação Completa**
 
+- [🤖 Capacidades de Agente](AGENT_CAPABILITIES.md) - **NOVO!** Guia completo do modo agente
 - [📋 Guia de Instalação](INSTALLATION_GUIDE.md)
 - [📦 Distribuição](DISTRIBUTION.md)
 - [🎯 Setup Demo](SETUP_DEMO.md)
@@ -118,10 +147,14 @@ O comando `/setup` é uma das principais inovações da extensão:
 
 ## 🏷️ **Versão Atual**
 
-**v0.0.4** - Release inicial pública
-- 🎉 Todas as funcionalidades principais implementadas
-- 📦 Pacote otimizado (42.54 KB)
-- ✅ Pronto para produção
+**v0.1.0** - Capacidades de Agente Implementadas! 🚀
+- 🤖 **NOVO:** Modo agente com edição real de arquivos
+- ⚡ **NOVO:** Execução de comandos no terminal
+- 🛠️ **NOVO:** Implementação automática de código
+- 📁 **NOVO:** Operações de arquivo (criar/editar/ler)
+- 🔧 **NOVO:** Refatoração e correção de bugs
+- 📦 Pacote otimizado (53.79 KB)
+- ✅ Totalmente funcional e pronto para produção
 
 ## 🤝 **Contribuição**
 
