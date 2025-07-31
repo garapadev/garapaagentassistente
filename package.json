@@ -2,7 +2,7 @@
   "name": "garapaagentassitent",
   "displayName": "GarapaAgent Assistant",
   "description": "Intelligent AI agent with customizable roles and file editing capabilities for VS Code development assistance",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "garapadev",
   "repository": {
     "type": "git",
@@ -54,8 +54,31 @@
       {
         "id": "garapaagentassitent.assistant",
         "name": "gaa",
-        "description": "GarapaAgent AI Assistant - Intelligent agent with customizable roles for development assistance",
-        "isSticky": true
+        "fullName": "GarapaAgent Assistant",
+        "description": "Intelligent AI agent with file editing capabilities, role system, and development automation",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "help",
+            "description": "Show available commands and features"
+          },
+          {
+            "name": "agent",
+            "description": "Enable/disable agent mode for file operations"
+          },
+          {
+            "name": "setup",
+            "description": "Configure development environment"
+          },
+          {
+            "name": "init",
+            "description": "Initialize roles folder with templates"
+          },
+          {
+            "name": "role",
+            "description": "Activate specific development role"
+          }
+        ]
       }
     ],
     "menus": {

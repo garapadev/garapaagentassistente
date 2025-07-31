@@ -4,14 +4,14 @@
 
 A extensão **GarapaAgent Assistant** foi empacotada com sucesso e está pronta para instalação:
 
-- **Arquivo:** `garapaagentassitent-0.1.0.vsix` (53.79 KB)
+- **Arquivo:** `garapaagentassitent-0.1.1.vsix` (56.26 KB)
 - **Repositório:** https://github.com/garapadev/garapaagentassistente
-- **Versão:** 0.1.0 (com capacidades de agente!)
+- **Versão:** 0.1.1 (modo agente melhorado!)
 
 ## 🚀 Como Instalar em Outro VS Code
 
 ### **Método Simples (Interface)**
-1. Copie o arquivo `garapaagentassitent-0.1.0.vsix`
+1. Copie o arquivo `garapaagentassitent-0.1.1.vsix`
 2. Abra VS Code no computador de destino
 3. Pressione `Ctrl+Shift+P`
 4. Digite: `Extensions: Install from VSIX...`
@@ -20,7 +20,7 @@ A extensão **GarapaAgent Assistant** foi empacotada com sucesso e está pronta 
 
 ### **Método por Comando**
 ```bash
-code --install-extension garapaagentassitent-0.1.0.vsix
+code --install-extension garapaagentassitent-0.1.1.vsix
 ```
 
 ### **Método Arrastar e Soltar**

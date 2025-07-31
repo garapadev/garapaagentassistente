@@ -29,6 +29,11 @@ export function activate(context: vscode.ExtensionContext) {
     participant.followupProvider = {
         provideFollowups: chatParticipant.provideFollowups.bind(chatParticipant)
     };
+    
+    // Set agent-specific properties
+    (participant as any).fullName = 'GarapaAgent Assistant';
+    (participant as any).isSticky = true;
+    (participant as any).supportsSlashCommands = true;
 
     // Register tree view
     vscode.window.createTreeView('garapaagentassitent.chatView', {

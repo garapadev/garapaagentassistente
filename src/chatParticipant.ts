@@ -31,6 +31,12 @@ export class GarapaAgentChatParticipant {
             // Get the user's message
             const userMessage = request.prompt;
             
+            // Show welcome message if it's a simple greeting or first interaction
+            if (this.isFirstInteraction(userMessage)) {
+                this.showWelcomeMessage(stream);
+                return;
+            }
+            
             // Check for role selection commands
             if (userMessage.startsWith('/help')) {
                 this.showHelp(stream);
@@ -522,6 +528,72 @@ Quando ativado com \`/agent on\`, posso:
 
 ---
 *Para mais informações, visite a documentação do projeto.*`);
+    }
+
+    private isFirstInteraction(message: string): boolean {
+        // Detect simple greetings or first-time interactions
+        const greetings = [
+            'oi', 'olá', 'hello', 'hi', 'hey', 'ola', 
+            'bom dia', 'boa tarde', 'boa noite', 'good morning', 'good afternoon',
+            'como você está', 'how are you', 'tudo bem', 'what can you do',
+            'o que você faz', 'help me', 'me ajude', 'preciso de ajuda',
+            '', // empty message
+        ];
+        
+        const cleanMessage = message.trim().toLowerCase();
+        return greetings.some(greeting => 
+            cleanMessage === greeting || 
+            cleanMessage.includes(greeting)
+        ) || cleanMessage.length < 10;
+    }
+
+    private showWelcomeMessage(stream: vscode.ChatResponseStream): void {
+        stream.markdown(`# 🤖 Olá! Sou o GarapaAgent Assistant
+
+**Sou um agente de IA inteligente com capacidades reais de desenvolvimento!**
+
+## 🚀 **O que posso fazer por você:**
+
+### **🤖 Modo Agente (Principal funcionalidade):**
+\`\`\`
+@gaa /agent on
+\`\`\`
+**Depois ativar, posso:**
+- ✅ **Criar arquivos** - "criar um componente Button.tsx"
+- ✅ **Editar código** - "adicionar função de login no auth.js"
+- ✅ **Executar comandos** - "instalar dependências npm"
+- ✅ **Implementar features** - "criar sistema de autenticação JWT"
+- ✅ **Refatorar código** - "melhorar performance deste componente"
+
+### **🎭 Sistema de Roles:**
+\`\`\`
+@gaa /init                    # Criar roles
+@gaa /role frontend-developer # Especialista React/shadcn/ui
+@gaa /role backend-architect  # Arquitetura de sistemas
+\`\`\`
+
+### **⚙️ Configuração Automática:**
+\`\`\`
+@gaa /setup  # Analisa seu projeto e configura ambiente
+\`\`\`
+
+## 💡 **Comece agora:**
+
+1. **Para criar/editar arquivos:** \`@gaa /agent on\`
+2. **Para ver todos os comandos:** \`@gaa /help\`
+3. **Para configurar projeto:** \`@gaa /setup\`
+
+**💬 Ou simplesmente me diga o que precisa fazer e eu ajudo!**
+
+---
+*💡 Dica: Ao contrário de outros chats, eu posso realmente criar e editar seus arquivos!*`);
+
+        // Add action buttons
+        stream.button({
+            command: 'garapaagentassitent.openChat',
+            title: '🚀 Ativar Modo Agente',
+            arguments: ['/agent on']
+        });
     }
 
     private showStatus(stream: vscode.ChatResponseStream): void {
