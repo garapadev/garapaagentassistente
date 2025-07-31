@@ -69,8 +69,8 @@ Se aparecer o menu de ajuda, a instalação foi bem-sucedida!
 
 ### **Comando /setup**
 - Detecção automática do ambiente
-- Preview browser com relatório visual
 - Configuração PM2 automática
+- Análise de dependências do projeto
 
 ### **Roles Especializados**
 - `frontend-developer` - shadcn/ui + Recharts
@@ -99,12 +99,8 @@ Se aparecer o menu de ajuda, a instalação foi bem-sucedida!
 - Certifique-se de que há um workspace aberto
 - Use `@gaa /status` para diagnóstico
 
-### **Preview browser não abre**
-- Verifique permissões do VS Code
-- Tente executar `@gaa /setup` novamente
-
 ### **🗑️ Como Desinstalar**
-Ver seção [Como Desinstalar a Extensão](#️-como-desinstalar-a-extensão) acima
+Ver seção [Como Desinstalar a Extensão](#️-como-desinstalar-a-extensão) abaixo
 
 ## �️ Como Desinstalar a Extensão
 
@@ -144,9 +140,6 @@ Para remover completamente todos os vestígios:
 # Remover pasta roles (se criada)
 rm -rf ./roles/
 
-# Remover arquivo de relatório do /setup (se existir)
-rm -f ./.garapaagent-setup-report.html
-
 # Limpar configurações do VS Code (opcional)
 # Vai para: %APPDATA%\Code\User\settings.json
 # Remove qualquer configuração relacionada ao GarapaAgent
@@ -164,7 +157,6 @@ code --list-extensions | grep garapaagentassitent
 **Considere fazer backup de:**
 - Pasta `roles/` (se você personalizou os arquivos .mdc)
 - Configurações específicas do projeto
-- Relatórios gerados pelo `/setup`
 
 ### **🔄 Reinstalação**
 

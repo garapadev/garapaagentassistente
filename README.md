@@ -15,7 +15,7 @@ Uma extensão revolucionária para VS Code que implementa um **agente de IA com 
 🤖 **Modo Agente**: **CRIA, EDITA e EXECUTA** arquivos e comandos reais  
 🎭 **Sistema de Roles**: Comportamentos especializados através de arquivos `.mdc`  
 ⚡ **Chat Participant**: Integração nativa `@gaa` no chat do VS Code  
-⚙️ **Comando /setup**: Detecção automática de ambiente + preview browser  
+⚙️ **Comando /setup**: Detecção automática de ambiente + configuração PM2  
 🌐 **Interface Webview**: Chat customizado com UI moderna  
 📊 **Especialização shadcn/ui + Recharts**: Frontend developer expert  
 🔧 **Automação PM2**: Configuração automática de processos  
@@ -88,16 +88,15 @@ O comando `/setup` é uma das principais inovações da extensão:
 
 ### **O que faz:**
 - 🔍 **Detecta automaticamente** o ambiente (OS, frameworks, dependências)
-- 📊 **Gera relatório HTML** com preview no browser integrado
 - ⚙️ **Configura PM2** para processos Node.js
 - 📝 **Cria role personalizado** baseado no projeto
-- 🌐 **Abre preview browser** com resultado visual
+- 📋 **Exibe análise** do ambiente no chat
 
 ### **Demo do /setup:**
 ```
 @gaa /setup
 ```
-![Setup Preview](test-setup-preview.html)
+*Analisa o ambiente e exibe relatório diretamente no chat*
 
 ## 🎭 **Roles Especializados**
 

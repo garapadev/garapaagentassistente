@@ -107,24 +107,27 @@
    - Antivírus pode bloquear execução de comandos
    - Adicione VS Code às exceções
 
-### 🌐 **Preview browser não abre**
+### 🌐 **Comando /setup não funciona**
 
 **Sintomas:**
-- `/setup` não abre preview
-- Relatório HTML não é exibido
+- `/setup` não responde
+- Erro na detecção do ambiente
+- Configuração PM2 falha
 
 **Soluções:**
-1. **Verificar Simple Browser:**
+1. **Verificar workspace:**
    ```
-   Ctrl+Shift+P → "Simple Browser: Show"
+   @gaa /status
+   # Deve mostrar workspace ativo
    ```
 
-2. **Abrir manualmente:**
-   - Localize arquivo `.garapaagent-setup-report.html`
-   - Abra no navegador externo
+2. **Verificar permissões:**
+   - Certifique-se de que pode criar arquivos na pasta
+   - Execute VS Code como administrador (se necessário)
 
-3. **Verificar permissões:**
-   - Certifique-se de que pode criar arquivos HTML
+3. **Testar manualmente:**
+   - Tente criar um arquivo manualmente na pasta
+   - Verifique se há espaço em disco
 
 ### 💬 **Chat não responde**
 
@@ -162,9 +165,6 @@ Ctrl+Shift+X → Procurar "GarapaAgent" → Uninstall
 ```bash
 # Remover pasta roles
 rm -rf ./roles/
-
-# Remover relatórios
-rm -f ./.garapaagent-setup-report.html
 
 # Limpar configurações (opcional)
 # Editar: %APPDATA%\Code\User\settings.json
