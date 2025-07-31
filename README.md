@@ -1,198 +1,144 @@
-# GarapaAgent Assi### 🎯 Sistema ### 🎯 Recursos Avançados
-- Análise automática do contexto do workspace
-- Integração com arquivos abertos e seleções
-- Comandos de seguimento inteligentes
-- Histórico de conversas na sidebar
-- **Carregamento automático de documentação online**
+# 🤖 GarapaAgent Assistant
 
-### 🌐 Documentação Inteligente
-O GarapaAgent pode automaticamente carregar e usar documentação online em tempo real:
+> **Agente de IA Inteligente para VS Code com Sistema de Roles Personalizáveis**
 
-#### **Como Funciona:**
-1. Adicione URLs na seção "Documentação de Referência" dos arquivos `.mdc`
-2. O agente detecta e carrega automaticamente o conteúdo
-3. Usa a documentação como contexto principal nas respostas
-4. Mantém-se sempre atualizado com a documentação oficial
+[![Version](https://img.shields.io/badge/version-0.0.4-blue.svg)](https://github.com/garapadev/garapaagentassistente/releases)
+[![VS Code](https://img.shields.io/badge/VS%20Code-1.102.0+-brightgreen.svg)](https://code.visualstudio.com/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-#### **Sites Suportados:**
-- **Databases:** Supabase, MongoDB, Firebase
-- **APIs:** Stripe, AWS, GitHub, Docker
-- **Frontend:** React, Next.js, Tailwind CSS
-- **Backend:** Express, Fastify, Prisma, TypeORM
-- **Learning:** MDN, Microsoft Docs
-- E muitos outros...
+## 🚀 **O que é o GarapaAgent Assistant?**
 
-#### **Exemplo de Uso:**
-```markdown
-## Documentação de Referência
-- https://docs.supabase.com/guides/database
-- https://docs.stripe.com/api
+Uma extensão poderosa para VS Code que implementa um **agente de IA personalizable** com sistema de roles especializado, integração nativa com GitHub Copilot e comandos inteligentes para automação de desenvolvimento.
+
+### ✨ **Principais Recursos**
+
+🎭 **Sistema de Roles**: Comportamentos especializados através de arquivos `.mdc`  
+🤖 **Chat Participant**: Integração nativa `@gaa` no chat do VS Code  
+⚙️ **Comando /setup**: Detecção automática de ambiente + preview browser  
+🌐 **Interface Webview**: Chat customizado com UI moderna  
+📊 **Especialização shadcn/ui + Recharts**: Frontend developer expert  
+🔧 **Automação PM2**: Configuração automática de processos  
+🛡️ **Regras de Segurança**: Anti-padrões para código limpo  
+
+## 📥 **Instalação Rápida**
+
+### **Método 1: Download da Release**
+1. Baixe o [arquivo `.vsix` da última release](https://github.com/garapadev/garapaagentassistente/releases)
+2. No VS Code: `Ctrl+Shift+P` → `Extensions: Install from VSIX...`
+3. Selecione o arquivo baixado
+
+### **Método 2: Linha de Comando**
+```bash
+# Após baixar o arquivo .vsix
+code --install-extension garapaagentassitent-0.0.4.vsix
 ```
 
-Quando você ativar este role, o agente carregará automaticamente essa documentação e a usará para fornecer respostas mais precisas e atualizadas.les Personalizado
-- **Comando `/init`** - Cria automaticamente a pasta `roles/` com arquivos `.mdc` padrão
-- Arquivos `.mdc` na pasta `roles/` definem comportamentos específicos
-- Comando `/rules` ou `/roles` para listar roles disponíveis
-- Comando `/role [nome]` para ativar um role
-- Comando `/clear` ou `/clear-role` para desativar role ativo
-- Comando `/help` para mostrar ajuda completa
-- Comando `/status` para ver status do sistema
-- Roles incluem: Frontend Developer, Backend Architect, CRM Specialist, Code Mentor
+## 🎯 **Como Usar**
 
-Uma extensão do VS Code com funcionalidades de agente de IA inteligente, projetada para assistir desenvolvedores com sistema de roles personalizáveis e comportamentos adaptativos.
-
-## Funcionalidades
-
-### 🤖 Chat Participant
-- Integração nativa com o sistema de chat do VS Code
-- Acesso através do comando `@gaa` no chat
-- Respostas contextualizadas baseadas no workspace atual
-- Suporte para GitHub Copilot como backend de IA
-
-### 💬 Interface de Chat Personalizada
-- Webview dedicado com interface moderna
-- Histórico de conversas persistente
-- Indicadores de digitação e feedback visual
-- Suporte para markdown nas respostas
-
-### � Sistema de Roles Personalizado
-- Arquivos `.mdc` na pasta `roles/` definem comportamentos específicos
-- Comando `/roles` para listar roles disponíveis
-- Comando `/role [nome]` para ativar um role
-- Comando `/clear-role` para desativar role ativo
-- Roles incluem: Frontend Developer, Backend Architect, CRM Specialist, Code Mentor
-
-### �🎯 Recursos Avançados
-- Análise automática do contexto do workspace
-- Integração com arquivos abertos e seleções
-- Comandos de seguimento inteligentes
-- Histórico de conversas na sidebar
-
-## Como Usar
-
-### 1. Chat Participant (Recomendado)
-1. Abra o painel de chat do VS Code (`Ctrl+Alt+I`)
-2. Digite `@gaa` seguido da sua pergunta
-3. **Primeiro uso - Inicialização:**
-   - `@gaa /init` - Cria automaticamente a estrutura de roles
-4. **Comandos principais:**
-   - `@gaa /help` - Mostra ajuda completa com todos os comandos
-   - `@gaa /rules` - Lista todos os roles disponíveis
-   - `@gaa /role frontend-developer` - Ativa role específico
-   - `@gaa /clear` - Desativa role atual
-   - `@gaa /status` - Mostra status do sistema
-5. Exemplo: `@gaa Como implementar autenticação JWT?`
-
-### 2. Webview Personalizado
-1. Use o comando `GarapaAgent: Open Chat` (`Ctrl+Shift+P`)
-2. **Primeiro uso:** Digite `/init` para criar a estrutura de roles
-3. Digite suas perguntas na interface dedicada
-4. **Comandos especiais:**
-   - `/init` - Cria automaticamente a pasta "roles/" com arquivos .mdc
-   - `/help` - Mostra ajuda completa com todos os comandos
-   - `/rules` ou `/roles` - Lista todos os roles disponíveis
-   - `/role [nome]` - Ativa um role específico
-   - `/clear` ou `/clear-role` - Desativa o role atual
-   - `/status` - Mostra status atual do sistema
-5. Visualize o histórico na sidebar do Explorer
-
-### 3. Sistema de Roles
-
-**Inicialização automática:**
-Use `@gaa /init` ou `/init` para criar automaticamente a pasta `roles/` com os arquivos padrão.
-
-**Criação manual:**
-Crie arquivos `.mdc` na pasta `roles/` do seu workspace para definir comportamentos personalizados:
-
-```markdown
-# Meu Role Personalizado
-
-## Identidade
-Você é um especialista em...
-
-## Comportamento
-- Sempre faça X
-- Considere Y
-- Implemente Z
-
-## Tecnologias Preferenciais
-- Lista de tecnologias
-
-## Documentação de Referência
-- https://docs.supabase.com/
-- https://docs.stripe.com/
-- https://reactjs.org/docs/
-
-## Estrutura de Resposta
-1. Passo 1
-2. Passo 2
-3. Exemplo de código
+### **Comandos Principais**
+```
+@gaa /help        # Ver todos os comandos disponíveis
+@gaa /init        # Criar pasta roles com templates
+@gaa /setup       # Configurar ambiente de desenvolvimento
+@gaa /status      # Verificar status atual
+@gaa /role <nome> # Ativar role específico
 ```
 
-**🌐 Carregamento Automático de Documentação:**
-O agente pode automaticamente carregar e usar documentação online quando URLs são especificadas na seção "Documentação de Referência" dos arquivos .mdc. Suporta sites como:
-- Supabase, Stripe, AWS, Firebase
-- React, Next.js, Tailwind CSS
-- Docker, Kubernetes, GitHub
-- MDN, Prisma, TypeORM e muitos outros
-
-## Comandos Disponíveis
-
-- `garapaagentassitent.openChat` - Abre interface de chat personalizada
-- `garapaagentassitent.clearChat` - Limpa histórico de conversas
-- `garapaagentassitent.refreshChat` - Atualiza a visualização do chat
-
-## Pré-requisitos
-
-- VS Code versão 1.102.0 ou superior
-- GitHub Copilot ativado (para funcionalidades de IA)
-- Conexão com internet
-
-## Instalação
-
-1. Clone este repositório
-2. Execute `npm install`
-3. Pressione `F5` para executar em modo debug
-4. Na nova janela do VS Code, teste os comandos
-
-## Desenvolvimento
-
-### Estrutura do Projeto
+### **Sistema de Roles**
 ```
-src/
-├── extension.ts          # Ponto de entrada principal
-├── chatParticipant.ts    # Implementação do chat participant
-├── chatViewProvider.ts   # Provider para histórico na sidebar
-└── webviewProvider.ts    # Interface de chat personalizada
+roles/
+├── frontend-developer.mdc    # Especialista shadcn/ui + Recharts
+├── backend-architect.mdc     # Arquitetura de sistemas
+├── crm-specialist.mdc        # Sistemas CRM
+├── code-mentor.mdc          # Mentoria de código
+└── develop.mdc              # Criado automaticamente pelo /setup
 ```
 
-### Scripts Disponíveis
+## 🛠️ **Comando /setup - Auto Configuração**
 
-- `npm run compile` - Compila TypeScript e executa linting
-- `npm run watch` - Modo de desenvolvimento com hot reload
-- `npm run test` - Executa testes
-- `npm run package` - Gera build de produção
+O comando `/setup` é uma das principais inovações da extensão:
 
-## Tecnologias Utilizadas
+### **O que faz:**
+- 🔍 **Detecta automaticamente** o ambiente (OS, frameworks, dependências)
+- 📊 **Gera relatório HTML** com preview no browser integrado
+- ⚙️ **Configura PM2** para processos Node.js
+- 📝 **Cria role personalizado** baseado no projeto
+- 🌐 **Abre preview browser** com resultado visual
 
-- **TypeScript** - Linguagem principal
-- **VS Code Extension API** - APIs nativas do VS Code
-- **Language Model API** - Integração com modelos de IA
-- **Chat Participants API** - Sistema de chat nativo
-- **Webview API** - Interface personalizada
+### **Demo do /setup:**
+```
+@gaa /setup
+```
+![Setup Preview](test-setup-preview.html)
 
-## Contribuindo
+## 🎭 **Roles Especializados**
 
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
+### **Frontend Developer**
+- ✅ Especialista em **shadcn/ui** components
+- 📊 Expert em **Recharts** para visualizações
+- 🛡️ **Regras de segurança** contra duplicação de código
+- 🎨 **Patterns de composição** otimizados
+
+### **Backend Architect**
+- 🏗️ Arquitetura de sistemas escaláveis
+- 🔐 Segurança e autenticação
+- 💾 Design de banco de dados
+
+### **CRM Specialist**
+- 👥 Gestão de clientes e leads
+- 📈 Pipelines de vendas
+- 🔄 Automação de processos
+
+## 🔧 **Requisitos**
+
+- **VS Code:** versão 1.102.0+
+- **GitHub Copilot:** necessário para IA
+- **Node.js:** para comandos de desenvolvimento (opcional)
+
+## 📚 **Documentação Completa**
+
+- [📋 Guia de Instalação](INSTALLATION_GUIDE.md)
+- [📦 Distribuição](DISTRIBUTION.md)
+- [🎯 Setup Demo](SETUP_DEMO.md)
+- [📝 Changelog](CHANGELOG.md)
+
+## 🆘 **Suporte**
+
+- 🐛 **Issues:** [GitHub Issues](https://github.com/garapadev/garapaagentassistente/issues)
+- 💬 **Discussões:** Use `@gaa /help` na própria extensão
+- 📖 **Docs:** Veja os arquivos `.md` inclusos
+
+## 🔄 **Roadmap**
+
+- [ ] **Marketplace do VS Code** (publisher oficial)
+- [ ] **Mais roles especializados** (DevOps, Mobile, etc.)
+- [ ] **API externa** para roles dinâmicos
+- [ ] **Integração CI/CD** automática
+- [ ] **Multi-linguagem** (EN, ES, etc.)
+
+## 🏷️ **Versão Atual**
+
+**v0.0.4** - Release inicial pública
+- 🎉 Todas as funcionalidades principais implementadas
+- 📦 Pacote otimizado (42.54 KB)
+- ✅ Pronto para produção
+
+## 🤝 **Contribuição**
+
+Contribuições são bem-vindas! 
+
+1. Fork o projeto
+2. Crie uma branch para sua feature
+3. Commit suas mudanças
+4. Push para a branch
 5. Abra um Pull Request
 
-## Licença
+## 📄 **Licença**
 
-Este projeto está licenciado sob a MIT License - veja o arquivo [LICENSE](LICENSE) para detalhes.
+MIT License - veja [LICENSE](LICENSE) para detalhes.
 
-## Contato
+---
 
-Para dúvidas ou sugestões, abra uma issue no repositório.
+**Desenvolvido com ❤️ por [garapadev](https://github.com/garapadev)**
+
+🌟 **Se gostou, deixe uma estrela!** ⭐
